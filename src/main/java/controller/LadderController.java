@@ -83,8 +83,16 @@ public class LadderController {
   private void showResults(Players players, Map<Player, Goal> results) {
     String input = inputView.inputPlayerForResult();
     while (!input.isBlank()) {
-      outputView.printResult(input, players, results);
+      selectResult(input, players, results);
       input = inputView.inputPlayerForResult();
     }
+  }
+
+  private void selectResult(String input, Players players, Map<Player, Goal> results) {
+    if(input.equals("all")){
+      outputView.printAllResults(results);
+      return;
+    }
+    outputView.printSingleResult(input, players, results);
   }
 }

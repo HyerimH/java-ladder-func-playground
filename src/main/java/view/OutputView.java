@@ -60,22 +60,13 @@ public class OutputView {
     System.out.println();
   }
 
-  public void printResult(String input, Players players, Map<Player, Goal> results) {
-    System.out.println("\n" + EXECUTION_RESULT);
-    if (input.equals("all")) {
-      printAllResults(results);
-      return;
-    }
-    printSingleResult(input, players, results);
-  }
-
-  private void printAllResults(Map<Player, Goal> results) {
+  public void printAllResults(Map<Player, Goal> results) {
     for (var entry : results.entrySet()) {
       System.out.println(entry.getKey().getName().getName() + " : " + entry.getValue().getGoal());
     }
   }
 
-  private void printSingleResult(String name, Players players, Map<Player, Goal> results) {
+  public void printSingleResult(String name, Players players, Map<Player, Goal> results) {
     for (Player player : players.getPlayers()) {
       printPlayerResult(name, player, results);
     }
