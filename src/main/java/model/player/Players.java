@@ -1,0 +1,39 @@
+package model.player;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+public class Players {
+
+  private final List<Player> players;
+
+  public Players(List<Player> players) {
+    validatePlayerCount(players);
+    validateDuplicate(players);
+    this.players = players;
+  }
+
+  private void validatePlayerCount(List<Player> players) {
+    if (players.size() < 2) {
+      throw new IllegalArgumentException("플레이어는 최소 2명 이상이어야 합니다.");
+    }
+  }
+
+  private void validateDuplicate(List<Player> players) {
+    Set<PlayerName> names = players.stream()
+        .map(Player::getName)
+        .collect(Collectors.toSet());
+    if (names.size() != players.size()) {
+      throw new IllegalArgumentException("플레이어의 이름은 중복될 수 없습니다.");
+    }
+  }
+
+  public int size() {
+    return players.size();
+  }
+
+  public List<Player> getPlayers() {
+    return List.copyOf(players);
+  }
+}
