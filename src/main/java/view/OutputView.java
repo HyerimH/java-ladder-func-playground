@@ -12,12 +12,14 @@ import java.util.Map;
 public class OutputView {
 
   private static final int MAXIMUM_PLAYER_NAME_SPACE = 6;
-  private static final String EXECUTION_RESULT = "실행 결과";
+  private static final String EXECUTION_RESULT = "\n실행 결과";
+  private static final String LADDER_RESULT_HEADER = "\n사다리 결과\n";
   private static final String CONNECTED_LINE="-----|";
   private static final String DISCONNECTED_LINE="     |";
   private static final String EDGE_OF_POINT="|";
 
   public void printLadder(Ladder ladder, Players players, Goals goals) {
+    System.out.println(LADDER_RESULT_HEADER);
     printPlayerNamers(players);
     printLadderLines(ladder);
     printGoals(goals);
@@ -61,12 +63,14 @@ public class OutputView {
   }
 
   public void printAllResults(Map<Player, Goal> results) {
+    System.out.println(EXECUTION_RESULT);
     for (var entry : results.entrySet()) {
       System.out.println(entry.getKey().getName().getName() + " : " + entry.getValue().getGoal());
     }
   }
 
   public void printSingleResult(String name, Players players, Map<Player, Goal> results) {
+    System.out.println(EXECUTION_RESULT);
     for (Player player : players.getPlayers()) {
       printPlayerResult(name, player, results);
     }
