@@ -11,12 +11,14 @@ import java.util.Map;
 
 public class OutputView {
 
-  private static final int MAXIMUM_PLAYER_NAME_SPACE = 6;
+  private static final int NAME_WIDTH = 6;
   private static final String EXECUTION_RESULT = "\n실행 결과";
   private static final String LADDER_RESULT_HEADER = "\n사다리 결과\n";
-  private static final String CONNECTED_LINE="-----|";
-  private static final String DISCONNECTED_LINE="     |";
-  private static final String EDGE_OF_POINT="|";
+  private static final String CONNECTED_LINE = "-----|";
+  private static final String DISCONNECTED_LINE = "     |";
+  private static final String EDGE_OF_POINT = "|";
+  private static final String START_PADDING = "    ";
+  private static final String SINGLE_SPACE = " ";
 
   public void printLadder(Ladder ladder, Players players, Goals goals) {
     System.out.println(LADDER_RESULT_HEADER);
@@ -27,7 +29,9 @@ public class OutputView {
 
   private void printPlayerNamers(Players players) {
     for (Player player : players.getPlayers()) {
-      System.out.printf("%-" + MAXIMUM_PLAYER_NAME_SPACE + "s", player.getName().getName());
+      String name = player.getName().getName();
+      int padding = NAME_WIDTH - 1 - name.length();
+      System.out.print(SINGLE_SPACE.repeat(padding) + name + SINGLE_SPACE);
     }
     System.out.println();
   }
@@ -39,7 +43,7 @@ public class OutputView {
   }
 
   private void printLine(List<Point> points) {
-    System.out.print("  "+EDGE_OF_POINT);
+    System.out.print(START_PADDING + EDGE_OF_POINT);
     for (var point : points) {
       printPoint(point);
     }
@@ -47,7 +51,7 @@ public class OutputView {
   }
 
   private void printPoint(Point point) {
-    if(point.isConnected()){
+    if (point.isConnected()) {
       System.out.print(CONNECTED_LINE);
       return;
     }
@@ -55,9 +59,10 @@ public class OutputView {
   }
 
   private void printGoals(Goals goals) {
-    System.out.print("  ");
     for (Goal goal : goals.getGoals()) {
-      System.out.printf("%-" + MAXIMUM_PLAYER_NAME_SPACE + "s", goal.getGoal());
+      String text = goal.getGoal();
+      int padding = NAME_WIDTH - 1 - text.length();
+      System.out.print(SINGLE_SPACE.repeat(padding) + text + SINGLE_SPACE);
     }
     System.out.println();
   }
