@@ -33,4 +33,18 @@ class PlayersTest {
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("플레이어의 이름은 중복될 수 없습니다.");
   }
+
+  @Test
+  @DisplayName("존재하지 않는 플레이어 이름 입력 시 예외가 발생한다")
+  void throwExceptionWhenInvalidName() {
+    // Given
+    Player player1 = new Player(new PlayerName("a"), new Position(0));
+    Player player2 = new Player(new PlayerName("b"), new Position(1));
+    Players players = new Players(List.of(player1, player2));
+
+    // When & Then
+    assertThatThrownBy(() -> players.validateContainsPlayer("invalid"))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessage("해당 이름의 플레이어가 존재하지 않습니다: invalid");
+  }
 }

@@ -29,6 +29,17 @@ public class Players {
     }
   }
 
+  public void validateContainsPlayer(String input) {
+    if (!this.containsPlayer(input)) {
+      throw new IllegalArgumentException("해당 이름의 플레이어가 존재하지 않습니다: " + input);
+    }
+  }
+
+  public boolean containsPlayer(String name) {
+    return players.stream()
+        .anyMatch(player -> player.getName().getName().equals(name));
+  }
+
   public int size() {
     return players.size();
   }
