@@ -1,17 +1,26 @@
 package controller;
 
-import model.Ladder;
+import static view.InputView.INPUT_EXCEPTION_MESSAGE;
+
+import java.util.Map;
+import java.util.stream.Collectors;
+import model.goal.Goal;
+import model.goal.Goals;
+import model.ladder.Ladder;
 import model.LadderGame;
-import model.LadderHeight;
-import model.LadderWidth;
-import model.Line;
+import model.ladder.LadderHeight;
 import java.util.ArrayList;
 import java.util.List;
+import model.player.Player;
+import model.player.PlayerName;
+import model.player.Players;
+import model.player.Position;
 import util.LadderGenerator;
 import view.InputView;
 import view.OutputView;
 
 public class LadderController {
+
   private final InputView inputView;
   private final OutputView outputView;
   private final LadderGenerator generator;
@@ -23,14 +32,59 @@ public class LadderController {
   }
 
   public void run() {
-    LadderWidth width = inputView.inputLadderWidth();
-    LadderHeight height = inputView.inputLadderHeight();
-    List<Line> lines = new ArrayList<>();
-    for (int i = 0; i < height.getLadderHeight(); i++) {
-      lines.add(new Line(width.getLadderWidth(), generator));
+    Players players = createPlayers();
+    Goals goals = createGoals(players);
+    LadderHeight height = createLadderHeight(players.size());
+    Ladder ladder = Ladder.of(players, height, generator);
+    LadderGame game = new LadderGame(ladder);
+    Map<Player, Goal> results = game.play(players, goals);
+    outputView.printLadder(ladder, players, goals);
+    showResults(players, results);
+  }
+
+  private Players createPlayers() {
+    try{
+      List<String> rawNames = inputView.inputPlayers();
+      List<Player> players = new ArrayList<>();
+      for (int i = 0; i < rawNames.size(); i++) {
+        players.add(new Player(new PlayerName(rawNames.get(i)),
+            new Position(i)));
+      }
+      return new Players(players);
+    } catch (IllegalArgumentException e) {
+      System.out.println(INPUT_EXCEPTION_MESSAGE);
+      return createPlayers();
     }
-    Ladder ladder = new Ladder(height, width, lines);
-    outputView.printLadder(ladder);
-    outputView.printResults(new LadderGame(ladder).play());
+  }
+
+  private Goals createGoals(Players players) {
+    try {
+      List<String> rawGoals = inputView.inputGoals(players);
+      List<Goal> goalList = rawGoals.stream()
+          .map(Goal::new)
+          .collect(Collectors.toList());
+      return new Goals(goalList, players.size());
+    } catch (IllegalArgumentException e) {
+      System.out.println(INPUT_EXCEPTION_MESSAGE);
+      return createGoals(players);
+    }
+  }
+
+  private LadderHeight createLadderHeight(int playerCount) {
+    try{
+      int height = inputView.inputLadderHeight();
+      return new LadderHeight(height, playerCount);
+    } catch (IllegalArgumentException e) {
+      System.out.println(INPUT_EXCEPTION_MESSAGE);
+      return createLadderHeight(playerCount);
+    }
+  }
+
+  private void showResults(Players players, Map<Player, Goal> results) {
+    String input = inputView.inputPlayerForResult();
+    while (!input.isBlank()) {
+      outputView.printResult(input, players, results);
+      input = inputView.inputPlayerForResult();
+    }
   }
 }
