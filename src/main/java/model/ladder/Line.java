@@ -10,7 +10,7 @@ public class Line {
   private final List<Point> points;
 
   public Line(List<Point> points) {
-    this.points = new ArrayList<>(points);
+    this.points = List.copyOf(points);
   }
 
   public static Line create(int PlayerCount, LadderGenerator ladderGenerator) {
@@ -23,14 +23,14 @@ public class Line {
 
   private static void makeLine(List<Point> points, LadderGenerator ladderGenerator) {
     if (points.isEmpty()) { // 비어 있을 땐, 랜덤 생성
-      points.add(Point.of(ladderGenerator.generate()));
+      points.add(Point.from(ladderGenerator.generate()));
       return;
     }
     if (points.get(points.size() - 1).isConnected()) { // 연속 연결 방지
       points.add(Point.DISCONNECTED);
       return;
     }
-    points.add(Point.of(ladderGenerator.generate())); // 다시 랜덤 생성
+    points.add(Point.from(ladderGenerator.generate())); // 다시 랜덤 생성
   }
 
   public void tryMoveAt(Position position) {

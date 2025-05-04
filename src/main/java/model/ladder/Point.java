@@ -4,7 +4,7 @@ public enum Point {
   CONNECTED,
   DISCONNECTED;
 
-  public static Point of(boolean status) {
+  public static Point from(boolean status) {
     if (status) {
       return CONNECTED;
     }

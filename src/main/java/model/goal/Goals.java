@@ -9,7 +9,7 @@ public class Goals {
 
   public Goals(List<Goal> goals, int playerCount) {
     validateGoals(goals, playerCount);
-    this.goals = new ArrayList<>(goals);
+    this.goals = List.copyOf(goals);
 
   }
 

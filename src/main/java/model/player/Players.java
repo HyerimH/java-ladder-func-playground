@@ -11,7 +11,7 @@ public class Players {
   public Players(List<Player> players) {
     validatePlayerCount(players);
     validateDuplicate(players);
-    this.players = players;
+    this.players = List.copyOf(players);;
   }
 
   private void validatePlayerCount(List<Player> players) {
