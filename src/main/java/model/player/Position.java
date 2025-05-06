@@ -5,21 +5,21 @@ import java.util.Objects;
 public class Position {
 
     public static final int MINIMUM_POSITION = 0;
-    private int value;
+    private final int value;
 
     public Position(int value) {
         this.value = value;
     }
 
-    public void moveToRight() {
-        value++;
+    public Position moveToRight() {
+        return new Position(value + 1);
     }
 
-    public void moveToLeft() {
+    public Position moveToLeft() {
         if (value <= MINIMUM_POSITION) {
             throw new IllegalArgumentException("Position의 값은 음수가 될 수 없습니다.");
         }
-        value--;
+        return new Position(value - 1);
     }
 
     public int getValue() {

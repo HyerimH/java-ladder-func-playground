@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import model.player.Players;
 import model.player.Position;
 import util.LadderGenerator;
@@ -54,9 +55,8 @@ public class Ladder {
 
     // 특정 Line의 연결 상태 확인
     private void getLineConnectionStatus(Boolean[] isConnectedAt, Line line) {
-        for (int i = 0; i < line.getLadderWidth(); i++) {
-            getPointConnectionStatus(isConnectedAt, line, i);
-        }
+        IntStream.range(0, line.getLadderWidth())
+                .forEach(i -> getPointConnectionStatus(isConnectedAt, line, i));
     }
 
     // 특정 Line의 특정 Point 연결 상태 확인
@@ -74,11 +74,12 @@ public class Ladder {
         return players.size();
     }
 
-    public Position getGoalsPosition(Position position) {
+    public Position getGoalsPosition(Position start) {
+        Position current = start;
         for (Line line : lines) {
-            line.tryMoveAt(position);
+            current = line.move(current);
         }
-        return position;
+        return current;
     }
 
     public List<Line> getLines() {

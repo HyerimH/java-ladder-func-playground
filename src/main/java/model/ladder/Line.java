@@ -2,6 +2,8 @@ package model.ladder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 import model.player.Position;
 import util.LadderGenerator;
 
@@ -13,11 +15,10 @@ public class Line {
         this.points = List.copyOf(points);
     }
 
-    public static Line create(int PlayerCount, LadderGenerator ladderGenerator) {
+    public static Line create(int playerCount, LadderGenerator ladderGenerator) {
         List<Point> points = new ArrayList<>();
-        for (int i = 0; i < PlayerCount - 1; i++) {
-            makeLine(points, ladderGenerator);
-        }
+        IntStream.range(0, playerCount - 1)
+                .forEach(i -> makeLine(points, ladderGenerator));
         return new Line(points);
     }
 
@@ -33,28 +34,12 @@ public class Line {
         points.add(Point.from(ladderGenerator.generate())); // 다시 랜덤 생성
     }
 
-    public void tryMoveAt(Position position) {
-        if (isRightPassable(position)) {
-            position.moveToRight();
-            return;
-        }
-        if (isLeftPassable(position)) {
-            position.moveToLeft();
-        }
-    }
-
-    private boolean isRightPassable(Position position) {
-        if (position.getValue() == points.size()) { // 오른쪽 끝, 이동 불가
-            return false;
-        }
-        return points.get(position.getValue()).isConnected();
-    }
-
-    private boolean isLeftPassable(Position position) {
-        if (position.getValue() == Position.MINIMUM_POSITION) { // 왼쪽 끝, 이동 불가
-            return false;
-        }
-        return points.get(position.getValue() - 1).isConnected();
+    public Position move(Position position) {
+        return Stream.of(Direction.RIGHT, Direction.LEFT, Direction.STAY)
+                .filter(direction -> direction.isMovable(position, points))
+                .findFirst()
+                .map(direction -> direction.move(position))
+                .orElse(position);
     }
 
     public List<Point> getPoints() {
