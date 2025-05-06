@@ -21,88 +21,80 @@ import view.OutputView;
 
 public class LadderController {
 
-  private final InputView inputView;
-  private final OutputView outputView;
-  private final LadderGenerator generator;
+    private final InputView inputView;
+    private final OutputView outputView;
+    private final LadderGenerator generator;
 
-  public LadderController(InputView inputView, OutputView outputView, LadderGenerator generator) {
-    this.inputView = inputView;
-    this.outputView = outputView;
-    this.generator = generator;
-  }
-
-  public void run() {
-    Players players = createPlayers();
-    Goals goals = createGoals(players);
-    LadderHeight height = createLadderHeight(players.size());
-    Ladder ladder = Ladder.of(players, height, generator);
-    LadderGame game = new LadderGame(ladder);
-    Map<Player, Goal> results = game.play(players, goals);
-    outputView.printLadder(ladder, players, goals);
-    showResults(players, results);
-  }
-
-  private Players createPlayers() {
-    try {
-      List<String> rawNames = inputView.inputPlayers();
-      List<Player> players = new ArrayList<>();
-      for (int i = 0; i < rawNames.size(); i++) {
-        players.add(new Player(new PlayerName(rawNames.get(i)),
-            new Position(i)));
-      }
-      return new Players(players);
-    } catch (IllegalArgumentException e) {
-      System.out.println(INPUT_EXCEPTION_MESSAGE);
-      return createPlayers();
+    public LadderController(InputView inputView, OutputView outputView, LadderGenerator generator) {
+        this.inputView = inputView;
+        this.outputView = outputView;
+        this.generator = generator;
     }
-  }
 
-  private Goals createGoals(Players players) {
-    try {
-      List<String> rawGoals = inputView.inputGoals(players);
-      List<Goal> goalList = rawGoals.stream()
-          .map(Goal::new)
-          .collect(Collectors.toList());
-      return new Goals(goalList, players.size());
-    } catch (IllegalArgumentException e) {
-      System.out.println(INPUT_EXCEPTION_MESSAGE);
-      return createGoals(players);
+    public void run() {
+        Players players = createPlayers();
+        Goals goals = createGoals(players);
+        LadderHeight height = createLadderHeight(players.size());
+        Ladder ladder = Ladder.of(players, height, generator);
+        LadderGame game = new LadderGame(ladder);
+        Map<Player, Goal> results = game.play(players, goals);
+        outputView.printLadder(ladder, players, goals);
+        showResults(players, results);
     }
-  }
 
-  private LadderHeight createLadderHeight(int playerCount) {
-    try {
-      int height = inputView.inputLadderHeight();
-      return new LadderHeight(height, playerCount);
-    } catch (IllegalArgumentException e) {
-      System.out.println(INPUT_EXCEPTION_MESSAGE);
-      return createLadderHeight(playerCount);
+    private Players createPlayers() {
+        try {
+            List<String> rawNames = inputView.inputPlayers();
+            return Players.from(rawNames);
+        } catch (IllegalArgumentException e) {
+            outputView.printErrorMessage(e.getMessage());
+            return createPlayers();
+        }
     }
-  }
 
-  private void showResults(Players players, Map<Player, Goal> results) {
-    String input = inputView.inputPlayerForResult();
-    while (!input.isBlank()) {
-      input = processResultInput(input, players, results);
+    private Goals createGoals(Players players) {
+        try {
+            List<String> rawGoals = inputView.inputGoals();
+            return Goals.from(rawGoals, players.size());
+        } catch (IllegalArgumentException e) {
+            outputView.printErrorMessage(e.getMessage());
+            return createGoals(players);
+        }
     }
-  }
 
-  private String processResultInput(String input, Players players, Map<Player, Goal> results) {
-    try {
-      selectResult(input, players, results);
-      return inputView.inputPlayerForResult();
-    } catch (IllegalArgumentException e) {
-      System.out.println(INPUT_EXCEPTION_MESSAGE);
-      return inputView.inputPlayerForResult();
+    private LadderHeight createLadderHeight(int playerCount) {
+        try {
+            int height = inputView.inputLadderHeight();
+            return new LadderHeight(height, playerCount);
+        } catch (IllegalArgumentException e) {
+            outputView.printErrorMessage(e.getMessage());
+            return createLadderHeight(playerCount);
+        }
     }
-  }
 
-  private void selectResult(String input, Players players, Map<Player, Goal> results) {
-    if (input.equals("all")) {
-      outputView.printAllResults(results);
-      return;
+    private void showResults(Players players, Map<Player, Goal> results) {
+        String input = inputView.inputPlayerForResult();
+        while (!input.isBlank()) {
+            input = processResultInput(input, players, results);
+        }
     }
-    players.validateContainsPlayer(input);
-    outputView.printSingleResult(input, players, results);
-  }
+
+    private String processResultInput(String input, Players players, Map<Player, Goal> results) {
+        try {
+            selectResult(input, players, results);
+            return inputView.inputPlayerForResult();
+        } catch (IllegalArgumentException e) {
+            outputView.printErrorMessage(e.getMessage());
+            return inputView.inputPlayerForResult();
+        }
+    }
+
+    private void selectResult(String input, Players players, Map<Player, Goal> results) {
+        if (input.equals("all")) {
+            outputView.printAllResults(results);
+            return;
+        }
+        players.validateContainsPlayer(input);
+        outputView.printSingleResult(input, players, results);
+    }
 }

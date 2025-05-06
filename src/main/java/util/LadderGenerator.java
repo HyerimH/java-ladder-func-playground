@@ -2,5 +2,5 @@ package util;
 
 public interface LadderGenerator {
 
-  boolean generate();
+    boolean generate();
 }

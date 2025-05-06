@@ -3,6 +3,8 @@ package model;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import model.ladder.Ladder;
 import model.player.Position;
 import model.goal.Goal;
@@ -12,20 +14,18 @@ import model.player.Players;
 
 public class LadderGame {
 
-  private final Ladder ladder;
+    private final Ladder ladder;
 
-  public LadderGame(Ladder ladder) {
-    this.ladder = ladder;
-  }
-
-  public Map<Player, Goal> play(Players players, Goals goals) {
-    Map<Player, Goal> results = new HashMap<>();
-    List<Player> playerList = players.getPlayers();
-    List<Goal> goalList = goals.getGoals();
-    for (int start = 0; start < playerList.size(); start++) {
-      Position end = ladder.getGoalsPosition(new Position(start));
-      results.put(playerList.get(start), goalList.get(end.getValue()));
+    public LadderGame(Ladder ladder) {
+        this.ladder = ladder;
     }
-    return results;
-  }
+
+    public Map<Player, Goal> play(Players players, Goals goals) {
+        return IntStream.range(0, players.size())
+                .boxed()
+                .collect(Collectors.toMap(
+                        index -> players.getPlayerAt(index),
+                        index -> goals.getGoalAt(ladder.getGoalsPosition(new Position(index)).getValue())
+                ));
+    }
 }
