@@ -22,7 +22,7 @@ public class LadderGame {
         return IntStream.range(0, players.size())
                 .boxed()
                 .collect(Collectors.toMap(
-                        index -> players.getPlayerAt(index),
+                        players::getPlayerAt,
                         index -> goals.getGoalAt(ladder.getGoalsPosition(new Position(index)).getValue())
                 ));
     }

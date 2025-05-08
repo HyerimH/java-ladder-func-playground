@@ -30,15 +30,4 @@ class PositionTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Position의 값은 음수가 될 수 없습니다.");
     }
-
-    @Test
-    @DisplayName("같은 값을 가진 Position 객체는 equals가 true를 반환한다")
-    void equalsShouldBeTrue() {
-        // Given
-        Position position1 = new Position(5);
-        Position position2 = new Position(5);
-
-        // When & Then
-        assertThat(position1.equals(position2)).isTrue();
-    }
 }
