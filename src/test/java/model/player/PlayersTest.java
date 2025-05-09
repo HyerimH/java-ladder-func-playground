@@ -12,7 +12,7 @@ class PlayersTest {
     @DisplayName("플레이어가 2명 미만일 경우 예외가 발생한다")
     void throwExceptionWhenLessThanTwo() {
         // Given
-        List<Player> players = List.of(new Player(new PlayerName("abc"), new Position(2)));
+        List<Player> players = List.of(new Player("abc", 2));
 
         // When & Then
         assertThatThrownBy(() -> new Players(players))
@@ -24,8 +24,8 @@ class PlayersTest {
     @DisplayName("플레이어 이름이 중복되면 예외가 발생한다")
     void throwExceptionWhenDuplicate() {
         // Given
-        Player player1 = new Player(new PlayerName("abc"), new Position(1));
-        Player player2 = new Player(new PlayerName("abc"), new Position(2));
+        Player player1 = new Player("abc",1);
+        Player player2 = new Player("abc",2);
         List<Player> players = List.of(player1, player2);
 
         // When & Then
@@ -38,8 +38,8 @@ class PlayersTest {
     @DisplayName("존재하지 않는 플레이어 이름 입력 시 예외가 발생한다")
     void throwExceptionWhenInvalidName() {
         // Given
-        Player player1 = new Player(new PlayerName("a"), new Position(0));
-        Player player2 = new Player(new PlayerName("b"), new Position(1));
+        Player player1 = new Player("a",0);
+        Player player2 = new Player("b",1);
         Players players = new Players(List.of(player1, player2));
 
         // When & Then

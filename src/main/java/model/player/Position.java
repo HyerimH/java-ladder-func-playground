@@ -1,7 +1,5 @@
 package model.player;
 
-import java.util.Objects;
-
 public class Position {
 
     public static final int MINIMUM_POSITION = 0;

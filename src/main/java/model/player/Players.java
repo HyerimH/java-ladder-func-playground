@@ -1,6 +1,5 @@
 package model.player;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -19,10 +18,7 @@ public class Players {
 
     public static Players from(List<String> names) {
         List<Player> players = IntStream.range(0, names.size())
-                .mapToObj(i -> new Player(
-                        new PlayerName(names.get(i)),
-                        new Position(i)
-                ))
+                .mapToObj(i -> new Player(names.get(i), i))
                 .toList();
         return new Players(players);
     }

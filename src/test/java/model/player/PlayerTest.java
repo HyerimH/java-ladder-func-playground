@@ -11,12 +11,10 @@ class PlayerTest {
     @DisplayName("정상적으로 Player 객체를 생성한다")
     void playerShouldHaveNameAndPosition() {
         // Given
-        PlayerName playerName = new PlayerName("abc");
-        Position position = new Position(5);
-        Player player = new Player(playerName, position);
+        Player player = new Player("abc", 5);
 
         // When & Then
-        assertThat(player.getName()).isEqualTo(playerName);
-        assertThat(player.getPosition()).isEqualTo(position);
+        assertThat(player.getName()).isEqualTo(new PlayerName("abc"));
+        assertThat(player.getPosition()).isEqualTo(new Position(5));
     }
 }

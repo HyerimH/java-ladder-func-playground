@@ -24,10 +24,10 @@ class LadderTest {
         LadderHeight height = new LadderHeight(5, playerCount);
 
         List<Player> playersList = List.of(
-                new Player(new PlayerName("a"), new Position(0)),
-                new Player(new PlayerName("b"), new Position(1)),
-                new Player(new PlayerName("c"), new Position(2)),
-                new Player(new PlayerName("d"), new Position(3))
+                new Player("a", 0),
+                new Player("b", 1),
+                new Player("c", 2),
+                new Player("d", 3)
         );
         Players players = new Players(playersList);
 
@@ -46,9 +46,9 @@ class LadderTest {
         // Given
         LadderHeight height = new LadderHeight(2, 3);
         List<Player> playersList = List.of(
-                new Player(new PlayerName("a"), new Position(0)),
-                new Player(new PlayerName("b"), new Position(1)),
-                new Player(new PlayerName("c"), new Position(2))
+                new Player("a", 0),
+                new Player("b", 1),
+                new Player("c", 2)
         );
         Players players = new Players(playersList);
         Ladder ladder = Ladder.of(players, height, new RandomLadderGenerator());
@@ -69,10 +69,10 @@ class LadderTest {
         List<Boolean> orderList = List.of(true, true, false, true, true, true);
         LadderHeight height = new LadderHeight(3, 4);
         List<Player> playersList = List.of(
-                new Player(new PlayerName("a"), new Position(0)),
-                new Player(new PlayerName("b"), new Position(1)),
-                new Player(new PlayerName("c"), new Position(2)),
-                new Player(new PlayerName("d"), new Position(3))
+                new Player("a", 0),
+                new Player("b", 1),
+                new Player("c", 2),
+                new Player("d", 3)
         );
         Players players = new Players(playersList);
         Ladder ladder = Ladder.of(players, height, new TestLadderGenerator(orderList));
